@@ -63,10 +63,6 @@
       "version": "3.0.0"
     },
     {
-      "packageName": "smaro-radiologist",
-      "version": "0.0.1"
-    },
-    {
       "packageName": "report-viewer",
       "version": "0.0.1"
     }
