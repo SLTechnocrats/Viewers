@@ -248,7 +248,7 @@ function modeFactory({ modeConfiguration }) {
               leftPanelResizable: true,
               rightPanels: [
                 cornerstone.segmentation,
-                'smaro-radiologist.panelModule.SmaroRadiologistPanel',
+                'report-viewer.panelModule.report-viewer',
                 tracked.measurements,
               ],
               rightPanelClosed: true,

@@ -80,6 +80,8 @@ module.exports = (env, argv) => {
         path.resolve(__dirname, '../../../node_modules'),
         SRC_DIR,
         path.resolve(__dirname, 'smaro-radiologist/node_modules'),
+        path.resolve(__dirname, 'smaro-radiologist/node_modules'),
+        path.resolve(__dirname, 'extensions/report-viewer/node_modules'),
       ],
     },
     plugins: [
