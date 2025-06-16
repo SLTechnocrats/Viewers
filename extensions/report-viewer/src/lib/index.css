@@ -1,0 +1,8 @@
+
+.tox .tox-statusbar__branding a {
+    display: none !important;
+  }
+  
+  .tox:not([dir=rtl]) .tox-statusbar__path>* {
+    display: none !important;
+  }
