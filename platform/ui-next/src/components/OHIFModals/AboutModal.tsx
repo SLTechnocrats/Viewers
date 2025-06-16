@@ -94,11 +94,11 @@ function SocialItem({ icon, url, text, className }: SocialItemProps) {
         className="py-6 text-lg"
       >
         <a
-          href={`https://github.com/${url}`}
+          href={`https://smaro.app`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          {text}
+          Smaro
         </a>
       </Button>
     </div>
