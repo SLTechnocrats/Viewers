@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 
-const useParams = (paramKey?: string) => {
+const useParams = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const params: { [key: string]: string } = {};
@@ -9,11 +9,8 @@ const useParams = (paramKey?: string) => {
     params[key] = value;
   });
 
-  if (paramKey) {
-    return params[paramKey];
-  }
-
   return params;
 };
 
 export default useParams;
+

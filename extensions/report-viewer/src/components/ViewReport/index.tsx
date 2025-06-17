@@ -7,11 +7,14 @@ import { api } from '../../api/api';
 import { isArray } from 'lodash';
 import useParams from '../../hooks/useParams';
 import axios from 'axios';
+import { setApiToken } from '../../storage/storage';
+import useDispatchAction from '../../hooks/useDispatchAction';
+import { setAuth } from '../../store/reducers/auth.slice';
 
 const ViewReport: React.FC = () => {
-  const report_id = useParams('reportId');
-  const token = useParams('bearer');
+  const { reportId: report_id, bearer: token } = useParams();
   const [analysis, setAnalysis] = useState<ReportAnalysisTypes>(initialAnalysisValues);
+  const dispatch = useDispatchAction();
 
   const getPatientReport = async (_id: number | string, token: string) => {
     if (!token) {
@@ -20,20 +23,17 @@ const ViewReport: React.FC = () => {
     if (!_id) {
       return;
     }
-    const config = {
-      headers: {
-        Token: token,
-      },
-    };
+
     if (!_.isNumber(_id)) {
       showErrorToast('Invalid Report Id');
       return;
     }
     try {
-      const { status: apiStatus, data: apiData } = await axios.get(
-        `${api.endpoints.report.get}/${_id}`,
-        config
+      const { status: apiStatus, data: apiData } = await api.get(
+        `${api.endpoints.report.get}/${_id}`
       );
+
+      console.log(apiData, 'apiData', apiStatus, token, _id, 'apiStatus');
 
       if (apiStatus === 200) {
         const { statusCode, data } = apiData;
@@ -41,28 +41,29 @@ const ViewReport: React.FC = () => {
           if (isArray(data)) {
             setAnalysis(data[0]);
           } else {
-            showErrorToast('Unable to fetch patient report');
+            // showErrorToast('Unable to fetch patient report');
           }
         } else {
-          showErrorToast('Unable to fetch patient report');
+          // showErrorToast('Unable to fetch patient report');
         }
       }
     } catch (e) {
-      showErrorToast('Unable to fetch patient report');
+      // showErrorToast('Unable to fetch patient report');
     }
   };
 
   useEffect(() => {
     void (async () => {
       if (report_id && token) {
-        console.log(report_id, 'report_id', token, 'token');
+        setApiToken(token);
+        dispatch(setAuth({ token: token }));
         await getPatientReport(Number(report_id), String(token));
       }
     })();
-  }, [report_id, token]);
+  }, [dispatch, report_id, token]);
 
   return (
-    <div className="p-2">
+    <div className="h-full overscroll-y-auto p-2">
       <ViewReportTab analysis={analysis} />
     </div>
   );
