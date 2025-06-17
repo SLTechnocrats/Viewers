@@ -375,13 +375,13 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
 
   return (
     <Fragment>
-      <div className="mb-2 flex w-full min-w-[80rem] flex-col content-center items-center justify-between align-middle md:flex-row">
+      <div className="sticky top-0 mb-2 flex w-full min-w-[80rem] flex-col content-center items-center justify-between bg-white py-2 align-middle md:flex-row">
         {_.isNumber(values?.id) && (
           <div className="flex content-center items-center justify-between gap-x-1 align-middle">
             {_.isString(analysis.patient_study_id) && (
               <button
                 onClick={() => handleDownload()}
-                className="flex flex-row items-center justify-center gap-1 rounded-lg !bg-purple-900 p-1.5 text-xs font-medium text-white transition hover:bg-purple-800 focus:outline-none sm:px-3"
+                className="flex min-w-max flex-row items-center justify-center gap-1 rounded-lg !bg-purple-900 p-1.5 text-xs font-medium text-white transition hover:bg-purple-800 focus:outline-none sm:px-3"
               >
                 <TbFileDownload
                   size={15}
@@ -390,6 +390,18 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
                 <span className="text-white">Download DCM File</span>
               </button>
             )}
+            <button
+              className="w-full rounded bg-blue-700 p-1.5 text-sm font-semibold text-white sm:w-auto"
+              onClick={() => saveAsDraft(values)}
+            >
+              Save As Draft
+            </button>
+            <button
+              className="w-full rounded bg-green-700 p-1.5 text-sm font-semibold text-white sm:w-auto"
+              onClick={() => handleSubmit()}
+            >
+              Send Report Back
+            </button>
           </div>
         )}
       </div>
@@ -506,21 +518,6 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
                 value={values[section.dataName]}
               />
             ))}
-        </div>
-
-        <div className="flex w-full flex-col items-center justify-end gap-2 border-[#CED4DA] px-4 sm:flex-row">
-          <button
-            className="w-full rounded bg-purple-700 p-1.5 text-sm font-semibold text-white sm:w-auto"
-            onClick={() => saveAsDraft(values)}
-          >
-            Save As Draft
-          </button>
-          <button
-            className="w-full rounded bg-green-700 p-1.5 text-sm font-semibold text-white sm:w-auto"
-            onClick={() => handleSubmit()}
-          >
-            Send Report Back
-          </button>
         </div>
       </div>
       {showConfirmModal && (
