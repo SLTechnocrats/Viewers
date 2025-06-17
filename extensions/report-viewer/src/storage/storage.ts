@@ -10,7 +10,7 @@ const removeApiToken = () => {
 };
 const getApiToken = (): string => {
   const token = secureLocalStorage.getItem('bearer');
-  return String(token);
+  return token ? String(token) : null;
 };
 
 /**
