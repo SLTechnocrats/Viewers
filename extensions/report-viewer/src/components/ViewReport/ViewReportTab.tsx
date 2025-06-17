@@ -375,7 +375,7 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
 
   return (
     <Fragment>
-      <div className="mb-2 flex w-full min-w-[40rem] flex-col content-center items-center justify-between align-middle md:flex-row">
+      <div className="mb-2 flex w-full min-w-[80rem] flex-col content-center items-center justify-between align-middle md:flex-row">
         <h3 className="text-lg font-bold text-black"></h3>
         {_.isNumber(values?.id) && (
           <div className="flex content-center items-center justify-between gap-x-1 align-middle">
