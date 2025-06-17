@@ -376,13 +376,12 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
   return (
     <Fragment>
       <div className="mb-2 flex w-full min-w-[80rem] flex-col content-center items-center justify-between align-middle md:flex-row">
-        <h3 className="text-lg font-bold text-black"></h3>
         {_.isNumber(values?.id) && (
           <div className="flex content-center items-center justify-between gap-x-1 align-middle">
             {_.isString(analysis.patient_study_id) && (
               <button
                 onClick={() => handleDownload()}
-                className="flex flex-row items-center justify-center gap-1 rounded-lg bg-purple-700 p-1.5 text-xs font-medium text-white transition hover:bg-purple-800 focus:outline-none sm:px-3"
+                className="flex flex-row items-center justify-center gap-1 rounded-lg !bg-purple-900 p-1.5 text-xs font-medium text-white transition hover:bg-purple-800 focus:outline-none sm:px-3"
               >
                 <TbFileDownload
                   size={15}
