@@ -1,6 +1,7 @@
 import axios from 'axios';
 // import { getApiToken } from '../storage/storage';
 import { ensureHTTPS } from '../utils/utils';
+import { getApiToken } from '../storage/storage';
 
 export const BASE_URL = 'https://api.smaro.app/api';
 export const OHIF_SERVER_URL = '';
@@ -9,48 +10,51 @@ export const AWS_BUCKET_URL = '';
 
 export const api = {
   get: async (url: string, params?: any) => {
-    // const token = getApiToken();
+    const token = getApiToken();
     url = ensureHTTPS(url);
     const config = {
-      ...params,
+      headers: {
+        Token: token,
+      },
+      params,
     };
     return axios.get(url, config);
   },
 
   post: async (url: string, formData: any, headers = {}) => {
-    // const token = getApiToken();
+    const token = getApiToken();
     const config = {
       method: 'post',
       url: ensureHTTPS(url),
       headers: {
         ...headers,
-        // Token: token,
+        Token: token,
       },
       data: formData,
     };
     return axios(config);
   },
   put: async (url: string, params: any, headers = {}) => {
-    // const token = getApiToken();
+    const token = getApiToken();
     const config = {
       method: 'put',
       url: ensureHTTPS(url),
       headers: {
         ...headers,
-        // Token: token,
+        Token: token,
       },
       data: params,
     };
     return axios(config);
   },
   delete: async (url: string, params: any, headers = {}) => {
-    // const token = getApiToken();
+    const token = getApiToken();
     const config = {
       method: 'delete',
       url: ensureHTTPS(url),
       headers: {
         ...headers,
-        // Token: token,
+        Token: token,
       },
       data: params,
     };
@@ -208,6 +212,3 @@ export const api = {
     },
   },
 };
-
-// Axios interceptor for handling unauthenticated errors
-

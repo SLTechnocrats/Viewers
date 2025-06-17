@@ -138,7 +138,7 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
         'Content-Type': 'application/json',
       };
       const params = JSON.stringify({
-        radiologist_id: user.id,
+        radiologist_id: analysis.radiologist_id,
       });
       const { data: apiData, status: apiStatus } = await api.post(
         api.endpoints.template.search,
@@ -292,14 +292,14 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
             setFormikValues(result);
             await getTemplates(result?.modality_id);
           } else {
-            showErrorToast('Unable to fetch patient report');
+            // showErrorToast('Unable to fetch patient report');
           }
         } else {
-          showErrorToast('Unable to fetch patient report');
+          // showErrorToast('Unable to fetch patient report');
         }
       }
     } catch (e) {
-      showErrorToast('Unable to fetch patient report');
+      // showErrorToast('Unable to fetch patient report');
     }
   };
 
@@ -391,16 +391,6 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
                 <span className="text-white">Download DCM File</span>
               </button>
             )}
-            <button
-              type="button"
-              onClick={() => setShowConfirmModal(true)}
-              className="flex flex-row content-center items-center gap-x-1 rounded-lg bg-purple-700 p-1.5 text-xs font-medium text-white focus:outline-none"
-            >
-              <span className="text-white">
-                <LuCopyPlus size={15} />
-              </span>
-              <span className="text-white">Create New Report</span>
-            </button>
           </div>
         )}
       </div>
@@ -520,9 +510,7 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
         </div>
 
         <div className="flex w-full flex-col items-center justify-end gap-2 border-[#CED4DA] px-4 sm:flex-row">
-          <button className="w-full rounded bg-[#6C757D] p-1.5 text-sm font-semibold text-white sm:w-auto">
-            Cancel
-          </button>
+
           <button
             className="w-full rounded bg-purple-700 p-1.5 text-sm font-semibold text-white sm:w-auto"
             onClick={() => saveAsDraft(values)}
