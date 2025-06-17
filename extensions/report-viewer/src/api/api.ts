@@ -1,12 +1,11 @@
 import axios from 'axios';
-// import { getApiToken } from '../storage/storage';
 import { ensureHTTPS } from '../utils/utils';
 import { getApiToken } from '../storage/storage';
 
 export const BASE_URL = 'https://api.smaro.app/api';
-export const OHIF_SERVER_URL = '';
-export const SOCKET_SERVER_URL = '';
-export const AWS_BUCKET_URL = '';
+export const OHIF_SERVER_URL = 'https://pacs.smaro.app';
+export const SOCKET_SERVER_URL = 'https://api.smaro.app';
+export const AWS_BUCKET_URL = 'https://smaro-prod-bucket.s3.amazonaws.com';
 
 export const api = {
   get: async (url: string, params?: any) => {

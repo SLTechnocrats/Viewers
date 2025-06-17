@@ -6,7 +6,6 @@ import { initialAnalysisValues, ReportAnalysisTypes } from '../../types/ReportAn
 import { api } from '../../api/api';
 import { isArray } from 'lodash';
 import useParams from '../../hooks/useParams';
-import axios from 'axios';
 import { setApiToken } from '../../storage/storage';
 import useDispatchAction from '../../hooks/useDispatchAction';
 import { setAuth } from '../../store/reducers/auth.slice';

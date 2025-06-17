@@ -14,7 +14,7 @@ import useAuth from '../../hooks/useAuth';
 import useDrafts from '../../hooks/useDrafts';
 import * as _ from 'lodash';
 import { isValidUrl } from '../../utils/utils';
-import { api, AWS_BUCKET_URL } from '../../api/api';
+import { api, AWS_BUCKET_URL, BASE_URL } from '../../api/api';
 import { removeReportFromDraft, setReportInDraft } from '../../store/reducers/drafts.slice';
 import { showErrorToast, showSuccessToast } from '../../utils/notify';
 import CustomSelectBox from '../Common/CustomSelectBox';
@@ -360,7 +360,7 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
     }
   }, [analysis]);
 
-  const ORTHANC_URL = `https://pacs.smaro.app/orthanc/study/files/${analysis.patient_study_id}`;
+  const ORTHANC_URL = `${BASE_URL}/orthanc/study/files/${analysis.patient_study_id}`;
 
   const handleDownload = () => {
     const anchor = document.createElement('a');
@@ -510,7 +510,6 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
         </div>
 
         <div className="flex w-full flex-col items-center justify-end gap-2 border-[#CED4DA] px-4 sm:flex-row">
-
           <button
             className="w-full rounded bg-purple-700 p-1.5 text-sm font-semibold text-white sm:w-auto"
             onClick={() => saveAsDraft(values)}
