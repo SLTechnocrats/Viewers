@@ -17,9 +17,9 @@ services:
 
       # Let's Encrypt certificate (SSL cert)
       - /var/lib/orthanc/db-v6:/var/lib/orthanc/db-v6:ro
-      - /etc/letsencrypt/live/smaro.app:/etc/letsencrypt/live/smaro.app:ro
-      - /etc/letsencrypt/archive/smaro.app:/etc/letsencrypt/archive/smaro.app:ro
-      - /etc/letsencrypt/privkey.pem:/etc/letsencrypt/privkey.pem:ro
+      - /etc/letsencrypt/live/pacs.smaro.app:/etc/letsencrypt/live/smaro.app:ro
+      # - /etc/letsencrypt/archive/smaro.app:/etc/letsencrypt/archive/smaro.app:ro
+      # - /etc/letsencrypt/privkey.pem:/etc/letsencrypt/privkey.pem:ro
 
     ports:
       - "80:80"   # HTTP (for redirect)
