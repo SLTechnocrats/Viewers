@@ -30,14 +30,14 @@ services:
 
   # Orthanc PACS
   orthanc:
-    image: jodogne/orthanc-plugins
+    build:
+      context: .
+      dockerfile: Dockerfile.orthanc
     hostname: orthanc
     container_name: orthancPACS
     volumes:
       - ./config/orthanc.json:/etc/orthanc/orthanc.json:ro
       - /var/lib/orthanc/db-v6:/var/lib/orthanc/db-v6
-      - /home/csr/crt_files/STAR_smaro_app.pem:/home/csr/crt_files/STAR_smaro_app.pem:ro
-
     ports:
       - "4242:4242"
       - "8042:8042"
