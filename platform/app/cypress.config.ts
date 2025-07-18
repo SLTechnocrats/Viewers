@@ -20,7 +20,7 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:3000',
     waitForAnimations: true,
-    chromeWebSecurity: false,
+    chromeWebSecurity: false, 
     defaultCommandTimeout: 30000,
     requestTimeout: 30000,
     responseTimeout: 30000,
