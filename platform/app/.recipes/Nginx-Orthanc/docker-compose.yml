@@ -38,7 +38,7 @@ services:
     volumes:
       - ./config/orthanc.json:/etc/orthanc/orthanc.json:ro
       - /var/lib/orthanc/db-v6:/var/lib/orthanc/db-v6
-      - /home/csr/:/home/csr:ro
+      - /root/crt_files/STAR_smaro_app.pem:/home/csr/crt_files/STAR_smaro_app.pem:ro
     ports:
       - "4242:4242"
       - "8042:8042"
