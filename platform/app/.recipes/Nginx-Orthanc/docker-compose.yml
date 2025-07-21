@@ -30,9 +30,7 @@ services:
 
   # Orthanc PACS
   orthanc:
-    build:
-      context: .
-      dockerfile: Dockerfile.orthanc
+    image: orthancteam/orthanc
     hostname: orthanc
     container_name: orthancPACS
     volumes:
