@@ -11,8 +11,8 @@ async function getStudiesForPatientByMRN(dataSource, qidoForStudyUID) {
   }
 
   return dataSource.query.studies.search({
-    patientId: mrn,
-    disableWildcard: true,
+    // patientId: mrn,
+    disableWildcard: false,
   });
 }
 

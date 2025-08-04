@@ -87,8 +87,8 @@ export function createStudyBrowserTabs(
       studies: primaryStudies.sort((studyA, studyB) => _byDate(studyA.date, studyB.date)),
     },
     {
-      name: 'rec',
-      label: 'Rec',
+      name: 'recent',
+      label: 'Recent',
       studies: recentStudies.sort((studyA, studyB) => _byDate(studyA.date, studyB.date)),
     },
     {
