@@ -1,13 +1,13 @@
 import React from 'react';
 import { Toaster as Sonner } from 'sonner';
-import { Icons } from '../Icons';
+// import { Icons } from '../Icons';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <div>
-      <Sonner
+      {/* <Sonner
         className="toaster group"
         loadingIcon={<Icons.LoadingSpinner />}
         icons={{
@@ -25,7 +25,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           },
         }}
         {...props}
-      />
+      /> */}
     </div>
   );
 };
