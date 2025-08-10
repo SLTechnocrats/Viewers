@@ -16,8 +16,8 @@ services:
       - ./logs/nginx:/var/logs/nginx
 
       # Let's Encrypt certificate (SSL cert)
-      - /etc/letsencrypt/live/dev.pacs.sltechnocrats.click:/etc/letsencrypt/live/dev.pacs.sltechnocrats.click:ro
-      - /etc/letsencrypt/archive/dev.pacs.sltechnocrats.click:/etc/letsencrypt/archive/dev.pacs.sltechnocrats.click:ro
+      - /etc/letsencrypt/live/pacs.smaro.app:/etc/letsencrypt/live/pacs.smaro.app:ro
+      - /etc/letsencrypt/archive/pacs.smaro.app:/etc/letsencrypt/archive/pacs.smaro.app:ro
       - /etc/letsencrypt/privkey.pem:/etc/letsencrypt/privkey.pem:ro  # optional and risky if used incorrectly
 
 
