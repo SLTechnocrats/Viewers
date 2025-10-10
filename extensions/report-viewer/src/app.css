@@ -1,0 +1,17 @@
+/* stop parent scroll repositioning when iframe (TinyMCE) gains focus */
+#report-panel {
+  overscroll-behavior: contain; /* block scroll chaining */
+  scroll-behavior: auto !important; /* disable smooth scroll animation */
+}
+
+/* specifically prevent iframe focus from forcing scroll into view */
+#report-panel iframe {
+  scroll-margin: 0 !important;
+  scroll-snap-type: none !important;
+  overscroll-behavior: contain !important;
+}
+
+/* defensive: prevent TinyMCE container from propagating scroll */
+#report-panel .tox-tinymce {
+  overscroll-behavior: contain !important;
+}

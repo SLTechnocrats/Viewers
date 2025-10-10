@@ -1,8 +1,14 @@
-
 .tox .tox-statusbar__branding a {
-    display: none !important;
-  }
-  
-  .tox:not([dir=rtl]) .tox-statusbar__path>* {
-    display: none !important;
-  }
+  display: none !important;
+}
+
+.tox:not([dir='rtl']) .tox-statusbar__path > * {
+  display: none !important;
+}
+
+.tox-edit-area__iframe {
+  overscroll-behavior: contain; /* prevents browser from auto-scrolling */
+}
+.tox-tinymce {
+  scroll-behavior: auto !important; /* disables smooth scroll jump */
+}
