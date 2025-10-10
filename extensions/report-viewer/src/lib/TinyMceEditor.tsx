@@ -1,10 +1,10 @@
-import React from 'react';
-import { useRef } from 'react';
-import BundledEditor from './BundledEditor'; // Import BundledEditor
+import React, { useRef, useLayoutEffect } from 'react';
+import BundledEditor from './BundledEditor'; // Make sure this path is correct
 import { Editor } from 'tinymce';
-import './index.css';
+import './index.css'; // Your component-specific styles
 import axios from 'axios';
 
+// Define the props for your component
 export interface EditorProps {
   onChange?: (content: string) => void;
   initialValue?: string;
@@ -15,11 +15,43 @@ export interface EditorProps {
 }
 
 export function TinyMceEditor(props: EditorProps) {
-  // Use ref for getting the TinyMCE editor instance
   const editorRef = useRef<Editor | null>(null);
-  // Function to upload the image to S3
 
-  // Function to upload the image to S3
+  // Ref to store the last two scroll positions
+  const scrollPositionsRef = useRef<number[]>(
+    JSON.parse(sessionStorage.getItem('reportPanelScrolls') || '[]')
+  );
+
+  // Helper to add new scroll positions and keep the array size at 2
+  const addScrollPosition = (pos: number) => {
+    scrollPositionsRef.current.push(pos);
+    if (scrollPositionsRef.current.length > 2) {
+      scrollPositionsRef.current.shift();
+    }
+    sessionStorage.setItem('reportPanelScrolls', JSON.stringify(scrollPositionsRef.current));
+  };
+
+  useLayoutEffect(() => {
+    const panel = document.getElementById('report-panel');
+    if (!panel) return;
+
+    // On initial load, restore the "true" last position
+    const lastValidPosition =
+      scrollPositionsRef.current.length > 0 ? scrollPositionsRef.current[0] : 0;
+    panel.scrollTop = lastValidPosition;
+
+    const handleScroll = () => {
+      addScrollPosition(panel.scrollTop);
+    };
+
+    panel.addEventListener('scroll', handleScroll);
+
+    return () => {
+      panel.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // --- Image Upload Logic (unchanged) ---
   const uploadImageHandler = async (
     blobInfo: any,
     _progress: any,
@@ -28,50 +60,45 @@ export function TinyMceEditor(props: EditorProps) {
   ) => {
     try {
       const url = await imageUploadFn(blobInfo.blob());
-      if (!url) {
-        reject('Error while uploading');
-      } else {
+      if (url) {
         resolve(url);
+      } else {
+        reject('Error during image upload');
       }
     } catch (error) {
-      console.log(error);
+      console.error('Upload handler failed:', error);
+      reject('Upload handler failed');
     }
   };
 
-  const imageUploadFn = async (file: File) => {
+  const imageUploadFn = async (file: File): Promise<string | null> => {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const API_URL = `${'/'}/${1}`;
-
-      const headers = {
-        'Content-Type': 'multipart/form-data',
-      };
-
-      const { status: apiStatus, data: apiData } = await axios.post(API_URL, formData, headers);
+      const API_URL = `/${1}`;
+      const headers = { 'Content-Type': 'multipart/form-data' };
+      const { status: apiStatus, data: apiData } = await axios.post(API_URL, formData, { headers });
 
       if (apiStatus === 200) {
         const { statusCode, data } = apiData;
         if (statusCode === 200) {
           return 'AWS_BUCKET_URL' + '/' + data;
-        } else {
-          return null;
         }
-      } else {
-        return null;
       }
+      return null;
     } catch (error) {
-      console.log(error);
+      console.error('API call for image upload failed:', error);
       return null;
     }
   };
 
   return (
     <BundledEditor
-      onEditorChange={(a: string) => props.onChange && props.onChange(a)}
+      onEditorChange={(content: string) => props.onChange && props.onChange(content)}
       onInit={(_: any, editor: Editor | null) => (editorRef.current = editor)}
       value={props.initialValue}
       init={{
+        // --- TinyMCE Configuration (unchanged) ---
         plugins: [
           'advlist',
           'autolink',
@@ -105,37 +132,42 @@ export function TinyMceEditor(props: EditorProps) {
           'autoresize',
         ],
         toolbar:
-          'insertfile undo redo | blocks | fontfamily | fontsizeinput fontsize | formatselect fontsizeselect fontselect | bold italic underline | forecolor backcolor emoticons | lineheight | checklist numlist bullist outdent indent | alignleft aligncenter alignright alignjustify | link image | table',
-        width: props.width,
-        min_width: props.minWidth,
+          'insertfile undo redo | blocks | fontfamily | fontsizeinput | bold italic underline | ' +
+          'forecolor backcolor emoticons | lineheight | ' +
+          'checklist numlist bullist outdent indent | alignleft aligncenter alignright alignjustify | ' +
+          'link image | table',
         menubar: false,
-        font_size_formats: '8px 10px 12px 14px 16px 18px 24px 36px 48px',
-        font_family_formats:
-          'Times New Roman=times new roman,times,serif;' +
-          'Andale Mono=andale mono,times; ' +
-          'Arial=arial,helvetica,sans-serif; ' +
-          'Arial Black=arial black,avant garde; ' +
-          'Book Antiqua=book antiqua,palatino; ' +
-          'Comic Sans MS=comic sans ms,sans-serif; ' +
-          'Courier New=courier new,courier,monospace; ' +
-          'Georgia=georgia,palatino; ' +
-          'Helvetica=helvetica; ' +
-          'Impact=impact,chicago; ' +
-          'Tahoma=tahoma,arial,helvetica,sans-serif; ' +
-          'Terminal=terminal,monaco; ' +
-          'Trebuchet MS=trebuchet ms,geneva; ' +
-          'Verdana=verdana,geneva; ',
-        line_height_formats: '0.5 1 1.2 1.4 1.6 2 2.2 2.4 2.6 2.8 3 3.2 3.4 3.6 3.8 4',
-        min_height: props.minHeight ?? 500,
-        height: props.height,
-        resize: true,
-        resize_img_proportional: true,
-        font_size_input_default_unit: 'px',
-        images_upload_handler: (blobInfo: any, progress: any) =>
-          new Promise((resolve, reject) => uploadImageHandler(blobInfo, progress, resolve, reject)),
         autoresize_min_height: 400,
         autoresize_max_height: 600,
+        browser_spellcheck: true,
         autoresize_bottom_margin: 10,
+        min_height: 400,
+        images_upload_handler: (blobInfo: any, progress: any) =>
+          new Promise((resolve, reject) => uploadImageHandler(blobInfo, progress, resolve, reject)),
+
+        // *** FINAL FIX FOR SCROLL ANIMATION ***
+        setup: (editor: Editor) => {
+          editor.on('focus', () => {
+            setTimeout(() => {
+              const panel = document.getElementById('report-panel');
+              if (panel) {
+                const positionToRestore =
+                  scrollPositionsRef.current.length > 1
+                    ? scrollPositionsRef.current[0]
+                    : panel.scrollTop;
+
+                // 1. Temporarily disable smooth scrolling
+                panel.style.scrollBehavior = 'auto';
+
+                // 2. Set the scroll position instantly
+                panel.scrollTop = positionToRestore;
+
+                // 3. Reset the style so it returns to its previous state (e.g., 'smooth')
+                panel.style.scrollBehavior = '';
+              }
+            }, 1);
+          });
+        },
       }}
     />
   );

@@ -16,7 +16,10 @@ const App = () => {
   return (
     <>
       {token ? (
-        <div className="h-full max-h-[120vh] overflow-x-hidden min-w-[20rem] overflow-y-scroll bg-white text-white">
+        <div
+          id="report-panel"
+          className="h-full max-h-[120vh] min-w-[20rem] overflow-x-hidden overflow-y-scroll bg-white text-white [overscroll-behavior:contain] [scroll-behavior:auto!important]"
+        >
           <Provider store={store}>
             <PersistGate persistor={persistor}>
               <Toaster />
