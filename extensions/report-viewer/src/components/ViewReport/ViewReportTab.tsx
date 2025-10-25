@@ -375,7 +375,7 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
 
   return (
     <Fragment>
-      <div className="sticky top-0 mb-2 flex w-full min-w-[80rem] flex-col content-center items-center justify-between bg-white py-2 align-middle md:flex-row">
+      <div className="absolute top-10 mb-2 flex w-full min-w-[80rem] flex-col content-center items-center justify-between bg-white py-2 align-middle md:flex-row  z-[999]">
         {_.isNumber(values?.id) && (
           <div className="flex content-center items-center justify-between gap-x-1 align-middle">
             {_.isString(analysis.patient_study_id) && (
@@ -406,8 +406,8 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
         )}
       </div>
 
-      <div className="w-full rounded border border-gray-400 p-1">
-        <div className="w-full border-gray-400 bg-purple-200 p-1">
+      <div className="w-full rounded border border-gray-400 p-1 mt-10">
+        <div className="w-full border-gray-400 bg-purple-200 p-1 ">
           <div className="mb-4 grid w-full grid-cols-1 gap-y-1 sm:grid-cols-2">
             <DataLabel
               label="Patient Id"
