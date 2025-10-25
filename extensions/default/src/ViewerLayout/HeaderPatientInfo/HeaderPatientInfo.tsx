@@ -49,7 +49,7 @@ function HeaderPatientInfo({ servicesManager, appConfig }: withAppTypes) {
         <Icons.Patient className="text-white" />
       )}
       <div className="flex flex-col justify-center">
-        {expanded ? (
+        {!expanded ? (
           <>
             <div className="self-start text-[13px] font-bold text-white">
               {formattedPatientName}
