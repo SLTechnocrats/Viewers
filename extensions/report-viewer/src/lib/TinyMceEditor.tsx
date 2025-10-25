@@ -99,6 +99,7 @@ export function TinyMceEditor(props: EditorProps) {
       value={props.initialValue}
       init={{
         // --- TinyMCE Configuration (unchanged) ---
+        toolbar_mode: 'sliding',
         plugins: [
           'advlist',
           'autolink',
