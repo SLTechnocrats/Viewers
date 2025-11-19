@@ -7,6 +7,7 @@ interface AnalysisTypes {
   radiologist_id: number;
   radiologist_name: string;
   assigned_by: number;
+  patient_draft_report:string;
   registration_date?: any;
   updated_time?: any;
 }
@@ -87,6 +88,7 @@ export const initialAnalysisValues: ReportAnalysisTypes = {
   report_template: "",
   techniques: "",
   clinical_history_count: 0,
+  patient_draft_report:'',
   clinical_history_file: "",
   dob: "",
   doctor_id: 0,

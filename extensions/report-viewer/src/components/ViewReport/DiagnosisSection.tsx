@@ -7,10 +7,11 @@ import { formatContent } from '../../utils/utils';
 
 interface OwnProps {
   sectionName: string;
-  value: keyof ReportAnalysisTypes;
+  value: string;
   dataName: string;
   isEditEnabled: boolean;
   onChangeValue: (dataName: string, diagnosisText: string) => void;
+   onDraftChange?: (draftContent: string) => void;
 }
 
 type Props = OwnProps;
@@ -20,6 +21,9 @@ const DiagnosisSection: React.FC<Props> = ({ ...props }) => {
 
   const onChangeValue = (encodedHtml: string) => {
     props.onChangeValue(props.dataName, encodedHtml);
+     if(props.onDraftChange){
+      props.onDraftChange(encodedHtml)
+    }
   };
 
   return (
@@ -48,6 +52,7 @@ const DiagnosisSection: React.FC<Props> = ({ ...props }) => {
         <div>
           <br />
           <TinyMceEditor
+           key={String(isEdit)}
             height="500px"
             initialValue={formatContent(props.value)}
             onChange={onChangeValue}
