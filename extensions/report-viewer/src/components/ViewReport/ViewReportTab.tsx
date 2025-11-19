@@ -20,6 +20,7 @@ import { showErrorToast, showSuccessToast } from '../../utils/notify';
 import CustomSelectBox from '../Common/CustomSelectBox';
 import DiagnosisSection from './DiagnosisSection';
 import ConfirmModal from './ConfirmModal';
+import { useDebounce } from '../../hooks/useDebounce';
 
 interface TemplateDataTypes {
   id: number;
@@ -81,6 +82,42 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
 
   const [templates, setTemplates] = useState<TemplateOptionTypes[]>([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+   const debouncedDraftContent = useDebounce(values.patient_draft_report, 2000);
+
+     useEffect(() => {
+    if (debouncedDraftContent && values.report_analysis_id) {
+      console.log("Auto-saving draft...");
+      saveDraftToDatabase(values.report_analysis_id, debouncedDraftContent);
+    }
+  }, [debouncedDraftContent, values.report_analysis_id]);
+
+   const saveDraftToDatabase = async (report_analysis_id: number, draftContent: string) => {
+    try {
+      const payload = {
+        report_analysis_id: report_analysis_id,
+        patient_draft_report: draftContent
+      };
+
+      const { status: apiStatus, data: apiData } = await api.post(
+        api.endpoints.report_analysis.draftupdate,
+        payload,
+      );
+
+      if (apiStatus === 200) {
+        const { statusCode, message } = apiData;
+        if (statusCode === 200) {
+          console.log("Draft auto-saved successfully to database");
+          // Don't show toast for auto-save to avoid annoying the user
+        } else {
+          console.error("Failed to auto-save draft to database");
+        }
+      }
+    } catch (e) {
+      console.error("Draft auto-save error:", e);
+    }
+  };
+
+
 
   const setFormikValues = (params: ReportAnalysisTypes) => {
     for (const [key, value] of Object.entries(params)) {
@@ -105,6 +142,13 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
       console.log(key, value);
       void setFieldValue(key, value);
     }
+      if (params.patient_draft_report) {
+        void setFieldValue("report_template", params.patient_draft_report);
+        void setFieldValue("patient_draft_report", params.patient_draft_report);
+      } else if (params.report_template) {
+        // If no draft, use the template and set it as draft
+        void setFieldValue("patient_draft_report", params.report_template);
+      }
   };
 
   const getUrl = (url: string) => {
@@ -118,15 +162,40 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
     void setFieldValue('report_template', option.template);
     void setFieldValue('report_title', option.label);
     void setFieldValue('template.value', option.value);
+     void setFieldValue("patient_draft_report", option.template);
   };
 
-  const saveAsDraft = (params: ReportAnalysisTypes) => {
-    dispatch(setReportInDraft(params));
+   const saveAsDraft = async (params: ReportAnalysisTypes) => {
+      try{
+    if (params.report_analysis_id) {
+
+       const payload = {
+        report_analysis_id: params.report_analysis_id,
+        patient_draft_report: params.patient_draft_report
+      };
+
+        const { status: apiStatus, data: apiData } = await api.post(
+        api.endpoints.report_analysis.draftupdate,
+        payload,
+      );
+
+       if (apiStatus === 200) {
+        const { statusCode, message } = apiData;
+        if (statusCode === 200) {
+          console.log("Draft saved successfully to database");
+         showSuccessToast("Draft saved successfully to database");
+        }
+      }
+
+    }
+  }
+  catch(e){
+    console.error("Draft save error:", e);
+    showSuccessToast("Draft saved successfully to database");
+      return false;
+  }
   };
 
-  const removeFromDraft = (id: number) => {
-    dispatch(removeReportFromDraft(id));
-  };
 
   const getTemplates = async (modality_id: number) => {
     try {
@@ -221,7 +290,6 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
       if (apiStatus === 200) {
         const { statusCode, message } = apiData;
         if (statusCode === 200) {
-          removeFromDraft(params.id);
           showSuccessToast(message);
           if (_.isArray(values.images)) {
             await handleReportImages();
@@ -346,19 +414,29 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
     return status;
   };
 
-  useEffect(() => {
-    if (_.isNumber(analysis.id)) {
-      void (async () => {
-        const draft = drafts.find(item => item.id === analysis.id);
-        if (draft && _.isNumber(draft.id)) {
-          setFormikValues(draft);
-          await getTemplates(draft?.modality_id);
-        } else {
-          await getPatientReport(analysis.id);
-        }
-      })();
+  /**
+ * check if given string is non-empty valid number
+ * @param num
+ */
+ function isNum(num: number | string | undefined | null): boolean {
+  if (num === undefined || num === null) return false;
+  const n = Number(num);
+  return !isNaN(n) && n > 0;
+}
+
+
+ useEffect(() => {
+  if (isNum(analysis.id)) {
+    console.log("Analysis data available:", analysis);
+
+    // Always use the analysis prop directly instead of looking in drafts
+    setFormikValues(analysis);
+
+    if (analysis.modality_id) {
+      getTemplates(analysis.modality_id);
     }
-  }, [analysis]);
+  }
+}, [analysis]); // Remove drafts dependency
 
   const ORTHANC_URL = `${BASE_URL}/orthanc/study/files/${analysis.patient_study_id}`;
 
@@ -373,9 +451,15 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
     window.open(image, '_blank');
   };
 
+   const handleDraftChange = (draftContent: string) => {
+    setFieldValue("patient_draft_report", draftContent);
+    setFieldValue("report_template", draftContent);
+  };
+
+
   return (
     <Fragment>
-      <div className="sticky top-0 mb-2 flex w-full min-w-[80rem] flex-col content-center items-center justify-between bg-white py-2 align-middle md:flex-row">
+      <div className="absolute top-10 mb-2 flex w-full min-w-[80rem] flex-col content-center items-center justify-between bg-white py-2 align-middle md:flex-row pl-2  z-[999]">
         {_.isNumber(values?.id) && (
           <div className="flex content-center items-center justify-between gap-x-1 align-middle">
             {_.isString(analysis.patient_study_id) && (
@@ -406,8 +490,8 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
         )}
       </div>
 
-      <div className="w-full rounded border border-gray-400 p-1">
-        <div className="w-full border-gray-400 bg-purple-200 p-1">
+      <div className="w-full rounded border border-gray-400 p-1 mt-10">
+        <div className="w-full border-gray-400 bg-purple-200 p-1 ">
           <div className="mb-4 grid w-full grid-cols-1 gap-y-1 sm:grid-cols-2">
             <DataLabel
               label="Patient Id"
@@ -515,6 +599,7 @@ const ViewReportTab: React.FC<Props> = ({ analysis }) => {
                 sectionName={section.sectionName}
                 dataName={section.dataName}
                 onChangeValue={setFieldValue}
+                 onDraftChange={section.dataName === "report_template" ? handleDraftChange : undefined}
                 value={values[section.dataName]}
               />
             ))}

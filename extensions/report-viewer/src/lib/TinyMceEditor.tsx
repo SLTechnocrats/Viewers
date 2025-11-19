@@ -99,6 +99,7 @@ export function TinyMceEditor(props: EditorProps) {
       value={props.initialValue}
       init={{
         // --- TinyMCE Configuration (unchanged) ---
+        toolbar_mode: 'sliding',
         plugins: [
           'advlist',
           'autolink',
@@ -140,6 +141,8 @@ export function TinyMceEditor(props: EditorProps) {
         autoresize_min_height: 400,
         autoresize_max_height: 600,
         browser_spellcheck: true,
+        autoresize_bottom_margin: 10,
+        min_height: 400,
         images_upload_handler: (blobInfo: any, progress: any) =>
           new Promise((resolve, reject) => uploadImageHandler(blobInfo, progress, resolve, reject)),
 

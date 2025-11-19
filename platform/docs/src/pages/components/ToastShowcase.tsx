@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../../../../ui-next/src/components/Button';
-import { toast } from '../../../../ui-next/src/components/Sonner';
+import {  toast } from '../../../../ui-next/src/components/Sonner';
 import ShowcaseRow from './ShowcaseRow';
 
 /**

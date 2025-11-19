@@ -62,7 +62,7 @@ const ViewReport: React.FC = () => {
   }, [dispatch, report_id, token]);
 
   return (
-    <div className="h-full overscroll-y-auto p-2">
+    <div className="h-full overscroll-y-auto ">
       <ViewReportTab analysis={analysis} />
     </div>
   );

@@ -75,4 +75,7 @@ export default function getAvailableLanguagesInfo(locales) {
   return availableLanguagesInfo;
 }
 
+
+
+
 export { getAvailableLanguagesInfo, getLanguageLabel };
