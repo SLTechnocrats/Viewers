@@ -6,7 +6,7 @@ import { getApiToken } from '../storage/storage';
 // export const OHIF_SERVER_URL = 'https://pacs.smaro.app';
 // export const SOCKET_SERVER_URL = 'https://api.smaro.app';
 // export const AWS_BUCKET_URL = 'https://smaro-prod-bucket.s3.amazonaws.com';
-
+ 
 export const BASE_URL = 'https://api.smaro.app/api';
 export const OHIF_SERVER_URL = "https://devothnac.developerstest.online";
 export const SOCKET_SERVER_URL = "https://api.smaro.app";
