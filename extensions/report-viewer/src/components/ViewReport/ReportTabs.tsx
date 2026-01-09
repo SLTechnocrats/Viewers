@@ -64,7 +64,7 @@ const ReportTabs: React.FC<Props> = ({ analysis }) => {
       item.route === "smart-report-viewer" &&
       isStr(analysis.patient_study_instance_id) &&
       isNum(analysis.id) &&
-      isStr(token)
+      isStr(token) 
     ) {
       token = token && encodeURIComponent(token);
       let VIEWER_URL = `${OHIF_SERVER_URL}/viewer?StudyInstanceUIDs=${analysis.patient_study_instance_id}&reportId=${analysis.id}&bearer=${token}`;
