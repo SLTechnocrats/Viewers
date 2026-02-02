@@ -1,7 +1,7 @@
 {
-  "name": "OHIF Viewer",
+  "name": "Smaro Viewer",
   "short_name": "Viewer",
-  "description": "OHIF Viewer",
+  "description": "Smaro Viewer",
   "dir": "auto",
   "lang": "en-US",
   "orientation": "any",

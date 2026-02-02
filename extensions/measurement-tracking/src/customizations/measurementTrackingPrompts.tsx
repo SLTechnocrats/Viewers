@@ -6,7 +6,7 @@ import promptTrackNewStudy from '../contexts/TrackedMeasurementsContext/promptTr
 import { promptLabelAnnotation, promptSaveReport } from '@ohif/extension-default';
 
 export default {
-  'measurement.promptBeginTracking': promptBeginTracking,
+  // 'measurement.promptBeginTracking': promptBeginTracking,
   'measurement.promptHydrateStructuredReport': promptHydrateStructuredReport,
   'measurement.promptTrackNewSeries': promptTrackNewSeries,
   'measurement.promptTrackNewStudy': promptTrackNewStudy,

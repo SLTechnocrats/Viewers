@@ -93,13 +93,20 @@ function modeFactory({ modeConfiguration }) {
       toolbarService.register(toolbarButtons);
       toolbarService.updateSection(toolbarService.sections.primary, [
         'MeasurementTools',
+        'EllipticalROI',
+        'ArrowAnnotate',
+        'RectangleROI',
         'Zoom',
+        'Magnify',
         'Pan',
         'TrackballRotate',
         'WindowLevel',
+        'StackScroll',
+        'Probe',
         'Capture',
         'Layout',
         'Crosshairs',
+        'Angle',
         'MoreTools',
       ]);
 
@@ -133,9 +140,6 @@ function modeFactory({ modeConfiguration }) {
       toolbarService.updateSection('MeasurementTools', [
         'Length',
         'Bidirectional',
-        'ArrowAnnotate',
-        'EllipticalROI',
-        'RectangleROI',
         'CircleROI',
         'PlanarFreehandROI',
         'SplineROI',
@@ -149,13 +153,9 @@ function modeFactory({ modeConfiguration }) {
         'ImageSliceSync',
         'ReferenceLines',
         'ImageOverlayViewer',
-        'StackScroll',
         'invert',
-        'Probe',
         'Cine',
-        'Angle',
         'CobbAngle',
-        'Magnify',
         'CalibrationLine',
         'TagBrowser',
         'AdvancedMagnify',
@@ -246,7 +246,11 @@ function modeFactory({ modeConfiguration }) {
             props: {
               leftPanels: [tracked.thumbnailList],
               leftPanelResizable: true,
-              rightPanels: [cornerstone.segmentation, tracked.measurements],
+              rightPanels: [
+                cornerstone.segmentation,
+                'report-viewer.panelModule.report-viewer',
+                tracked.measurements,
+              ],
               rightPanelClosed: true,
               rightPanelResizable: true,
               viewports: [
